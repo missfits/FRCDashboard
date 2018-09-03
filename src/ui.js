@@ -17,12 +17,77 @@ let ui = {
         button: document.getElementById('example-button'),
         readout: document.getElementById('example-readout').firstChild
     },
-    autoSelect: document.getElementById('auto-select'),
-    armPosition: document.getElementById('arm-position')
+    //autoSelect: document.getElementById('auto-select'),
+    armPosition: document.getElementById('arm-position'),
+    potOutput: document.getElementById('pot-output'),
+    selectorBox: document.getElementById("selectors")
 };
+var chooserNames = [];
 
 // Key Listeners
-
+NetworkTables.addGlobalListener(onValueChanged, true);
+function onValueChanged(key, value, isNew) {
+    console.log(NetworkTables.getKeys());
+    if (isNew && key.startsWith("/SmartDashboard")) {
+        var keyArr = key.split("/");
+        //for choosers
+        if (key.endsWith("options")) {
+            chooserNames.push(keyArr[2]);
+            console.log(keyArr[2]);
+            /*var box = document.createElement("div");
+            ui.selectorBox.appendChild(box);*/
+            var name = document.createElement("p");
+            name.innerHTML = keyArr[2];
+            ui.selectorBox.appendChild(name);
+            var select = document.createElement("select");
+            select.id = keyArr[2];
+            ui.selectorBox.appendChild(select);
+            select.onchange = function () {
+                console.log("changed");
+                NetworkTables.putValue('/SmartDashboard/' + keyArr[2] + '/selected', this.value);
+                console.log(name.innerHTML + ": " + this.value);
+            }
+            for (var a in value) {
+                var choice = document.createElement("option");
+                choice.innerHTML = value[a];
+                select.appendChild(choice);
+            }
+        } else if ((typeof value == "number" || typeof value == "string") && keyArr.length == 3) {
+            var display = document.createElement("p");
+            display.id = keyArr[2];
+            display.innerHTML = keyArr[2] + " : " + value;
+            document.getElementById("printouts").appendChild(display);
+        } else if (typeof value == "boolean") {
+            /*var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            svg.setAttribute("height", 15);
+            svg.setAttribute("width", 15);
+            var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            circle.setAttribute("cx", 7.5);
+            circle.setAttribute("cy", 7.5);
+            circle.setAttribute("r", 7.5);
+            circle.setAttribute("stroke-width",0)*/
+            var display = document.createElement("p");
+            display.innerHTML = keyArr[2] + " : ";
+            var val = document.createElement("span");
+            val.innerHTML = value;
+            if (value) {
+                val.style.color = "#37cc12";
+            } else {
+                val.style.color = "#e2280f";
+            }
+            display.appendChild(val);
+            document.getElementById("booleans").appendChild(display);
+            NetworkTables.addKeyListener(key, (key, value) => {
+                display.innerHTML = keyArr[2] + " : " + value;
+                if (value) {
+                    val.style.color = "#37cc12";
+                } else {
+                    val.style.color = "#e2280f";
+                }
+            });
+        }
+    }
+}
 // Gyro rotation
 let updateGyro = (key, value) => {
     ui.gyro.val = value;
@@ -34,7 +99,7 @@ let updateGyro = (key, value) => {
     ui.gyro.arm.style.transform = `rotate(${ui.gyro.visualVal}deg)`;
     ui.gyro.number.innerHTML = ui.gyro.visualVal + 'º';
 };
-NetworkTables.addKeyListener('/SmartDashboard/drive/navx/yaw', updateGyro);
+NetworkTables.addKeyListener('/SmartDashboard/Gyro Angle:', updateGyro);
 
 // The following case is an example, for a robot with an arm at the front.
 NetworkTables.addKeyListener('/SmartDashboard/arm/encoder', (key, value) => {
@@ -58,6 +123,10 @@ NetworkTables.addKeyListener('/SmartDashboard/example_variable', (key, value) =>
     ui.example.readout.data = 'Value is ' + value;
 });
 
+NetworkTables.addKeyListener('/SmartDashboard/Potentiometer Output', (key, value) => {
+    ui.potOutput.innerHTML = "Potentiometer Output: " + value;
+});
+
 NetworkTables.addKeyListener('/robot/time', (key, value) => {
     // This is an example of how a dashboard could display the remaining time in a match.
     // We assume here that value is an integer representing the number of seconds left.
@@ -65,7 +134,7 @@ NetworkTables.addKeyListener('/robot/time', (key, value) => {
 });
 
 // Load list of prewritten autonomous modes
-NetworkTables.addKeyListener('/SmartDashboard/autonomous/modes', (key, value) => {
+/*NetworkTables.addKeyListener('/SmartDashboard/Auto Strategy/options', (key, value) => {
     // Clear previous list
     while (ui.autoSelect.firstChild) {
         ui.autoSelect.removeChild(ui.autoSelect.firstChild);
@@ -78,34 +147,50 @@ NetworkTables.addKeyListener('/SmartDashboard/autonomous/modes', (key, value) =>
     }
     // Set value to the already-selected mode. If there is none, nothing will happen.
     ui.autoSelect.value = NetworkTables.getValue('/SmartDashboard/currentlySelectedMode');
-});
+});*/
 
 // Load list of prewritten autonomous modes
-NetworkTables.addKeyListener('/SmartDashboard/autonomous/selected', (key, value) => {
+/*NetworkTables.addKeyListener('/SmartDashboard/autonomous/selected', (key, value) => {
     ui.autoSelect.value = value;
-});
+});*/
 
 // The rest of the doc is listeners for UI elements being clicked on
-ui.example.button.onclick = function() {
+ui.example.button.onclick = function () {
     // Set NetworkTables values to the opposite of whether button has active class.
     NetworkTables.putValue('/SmartDashboard/example_variable', this.className != 'active');
 };
 // Reset gyro value to 0 on click
-ui.gyro.container.onclick = function() {
+ui.gyro.container.onclick = function () {
     // Store previous gyro val, will now be subtracted from val for callibration
     ui.gyro.offset = ui.gyro.val;
     // Trigger the gyro to recalculate value.
     updateGyro('/SmartDashboard/drive/navx/yaw', ui.gyro.val);
 };
 // Update NetworkTables when autonomous selector is changed
-ui.autoSelect.onchange = function() {
+/*ui.autoSelect.onchange = function() {
     NetworkTables.putValue('/SmartDashboard/autonomous/selected', this.value);
-};
+};*/
 // Get value of arm height slider when it's adjusted
-ui.armPosition.oninput = function() {
+ui.armPosition.oninput = function () {
     NetworkTables.putValue('/SmartDashboard/arm/encoder', parseInt(this.value));
 };
 
-addEventListener('error',(ev)=>{
-    ipc.send('windowError',{mesg:ev.message,file:ev.filename,lineNumber:ev.lineno})
+addEventListener('error', (ev) => {
+    ipc.send('windowError', { mesg: ev.message, file: ev.filename, lineNumber: ev.lineno })
 })
+/*console.log(chooserNames[0]);
+//for (var a in chooserNames) {
+    document.getElementById(chooserNames[0]).onchange = function () {
+        NetworkTables.putValue('/SmartDashboard/' + chooserNames[0] + '/selected', this.value);
+        console.log(chooserNames[0] + ": " + this.value);
+    }
+//}*/
+
+function inArray(arr, obj) {
+    for (var a in arr) {
+        if (obj == arr[a]) {
+            return true;
+        }
+    }
+    return false;
+}

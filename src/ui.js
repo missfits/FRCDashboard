@@ -36,22 +36,33 @@ function onValueChanged(key, value, isNew) {
             console.log(keyArr[2]);
             /*var box = document.createElement("div");
             ui.selectorBox.appendChild(box);*/
-            var name = document.createElement("p");
-            name.innerHTML = keyArr[2];
-            ui.selectorBox.appendChild(name);
-            var select = document.createElement("select");
-            select.id = keyArr[2];
-            ui.selectorBox.appendChild(select);
-            select.onchange = function () {
-                console.log("changed");
-                NetworkTables.putValue('/SmartDashboard/' + keyArr[2] + '/selected', this.value);
-                console.log(name.innerHTML + ": " + this.value);
-            }
-            for (var a in value) {
-                var choice = document.createElement("option");
-                choice.innerHTML = value[a];
-                select.appendChild(choice);
-            }
+			if(value.length == 2){
+				var cb = document.creatElement("input");
+				cb.type = "checkbox";
+				cb.id = keyArr[2];
+				ui.selectorBox.appendChild(cb);
+				var name = document.createElement("label");
+				name.for = keyArr[2];
+				name.innerHTML = keyArr[2];
+				ui.selectorBox.appendChild(name);
+			}else{
+				var name = document.createElement("p");
+				name.innerHTML = keyArr[2];
+				ui.selectorBox.appendChild(name);
+				var select = document.createElement("select");
+				select.id = keyArr[2];
+				ui.selectorBox.appendChild(select);
+				select.onchange = function () {
+					console.log("changed");
+					NetworkTables.putValue('/SmartDashboard/' + keyArr[2] + '/selected', this.value);
+					console.log(name.innerHTML + ": " + this.value);
+				}
+				for (var a in value) {
+					var choice = document.createElement("option");
+					choice.innerHTML = value[a];
+					select.appendChild(choice);
+				}
+			}
         } else if ((typeof value == "number" || typeof value == "string") && keyArr.length == 3) {
             var display = document.createElement("p");
             display.id = keyArr[2];

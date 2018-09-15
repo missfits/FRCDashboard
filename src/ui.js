@@ -10,10 +10,10 @@ let ui = {
         arm: document.getElementById('gyro-arm'),
         number: document.getElementById('gyro-number')
     },
-    example: {
+    /*example: {
         button: document.getElementById('example-button'),
         readout: document.getElementById('example-readout').firstChild
-    },
+    },*/
     //autoSelect: document.getElementById('auto-select'),
     selectorBox: document.getElementById("selectors")
 };
@@ -53,7 +53,7 @@ function onValueChanged(key, value, isNew) {
 					console.log("changed");
 					NetworkTables.putValue('/SmartDashboard/' + keyArr[2] + '/selected', this.value);
 					console.log(name.innerHTML + ": " + this.value);
-				}
+				};
 				for (var a in value) {
 					var choice = document.createElement("option");
 					choice.innerHTML = value[a];
@@ -110,15 +110,11 @@ let updateGyro = (key, value) => {
 NetworkTables.addKeyListener('/SmartDashboard/Gyro Angle:', updateGyro);
 
 // This button is just an example of triggering an event on the robot by clicking a button.
-NetworkTables.addKeyListener('/SmartDashboard/example_variable', (key, value) => {
+/*NetworkTables.addKeyListener('/SmartDashboard/example_variable', (key, value) => {
     // Set class active if value is true and unset it if it is false
     ui.example.button.classList.toggle('active', value);
     ui.example.readout.data = 'Value is ' + value;
-});
-
-NetworkTables.addKeyListener('/SmartDashboard/Potentiometer Output', (key, value) => {
-    ui.potOutput.innerHTML = "Potentiometer Output: " + value;
-});
+});*/
 
 NetworkTables.addKeyListener('/robot/time', (key, value) => {
     // This is an example of how a dashboard could display the remaining time in a match.
@@ -148,10 +144,10 @@ NetworkTables.addKeyListener('/robot/time', (key, value) => {
 });*/
 
 // The rest of the doc is listeners for UI elements being clicked on
-ui.example.button.onclick = function () {
+/*ui.example.button.onclick = function () {
     // Set NetworkTables values to the opposite of whether button has active class.
     NetworkTables.putValue('/SmartDashboard/example_variable', this.className != 'active');
-};
+};*/
 // Reset gyro value to 0 on click
 ui.gyro.container.onclick = function () {
     // Store previous gyro val, will now be subtracted from val for callibration
@@ -165,8 +161,8 @@ ui.gyro.container.onclick = function () {
 };*/
 
 addEventListener('error', (ev) => {
-    ipc.send('windowError', { mesg: ev.message, file: ev.filename, lineNumber: ev.lineno })
-})
+    ipc.send('windowError', { mesg: ev.message, file: ev.filename, lineNumber: ev.lineno });
+});
 /*console.log(chooserNames[0]);
 //for (var a in chooserNames) {
     document.getElementById(chooserNames[0]).onchange = function () {

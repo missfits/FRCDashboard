@@ -45,7 +45,7 @@ function createWindow() {
     client.start((con, err) => {
 
         let connectFunc = () => {
-            console.log('Sending status');
+            console.log('Sending status', con);
             mainWindow.webContents.send('connected', con);
 
             // Listens to the changes coming from the client
@@ -83,6 +83,10 @@ function createWindow() {
         } else {
             client.start(callback, address);
         }
+    });
+    ipc.on("disconnect", (ev) => {
+        console.log("disconnected");
+        client.stop();
     });
     ipc.on('add', (ev, mesg) => {
         client.Assign(mesg.val, mesg.key, (mesg.flags & 1) === 1);

@@ -31,16 +31,18 @@ function onValueChanged(key, value, isNew) {
             console.log(keyArr[2]);
             /*var box = document.createElement("div");
             ui.selectorBox.appendChild(box);*/
-			if(value.length == 2){
-				var cb = document.creatElement("input");
+            /*if (value.length == 2) {
+                var div = document.createElement("div");
+				var cb = document.createElement("input");
 				cb.type = "checkbox";
 				cb.id = keyArr[2];
-				ui.selectorBox.appendChild(cb);
+                div.appendChild(cb);
 				var name = document.createElement("label");
 				name.for = keyArr[2];
 				name.innerHTML = keyArr[2];
-				ui.selectorBox.appendChild(name);
-			}else{
+                div.appendChild(name);
+                ui.selectorBox.appendChild(div);
+			}else{*/
 				var name = document.createElement("p");
 				name.innerHTML = keyArr[2];
 				ui.selectorBox.appendChild(name);
@@ -57,7 +59,7 @@ function onValueChanged(key, value, isNew) {
 					choice.innerHTML = value[a];
 					select.appendChild(choice);
 				}
-			}
+			//}
         } else if ((typeof value == "number" || typeof value == "string") && keyArr.length == 3) {
             var display = document.createElement("p");
             display.id = keyArr[2];
@@ -161,10 +163,6 @@ ui.gyro.container.onclick = function () {
 /*ui.autoSelect.onchange = function() {
     NetworkTables.putValue('/SmartDashboard/autonomous/selected', this.value);
 };*/
-// Get value of arm height slider when it's adjusted
-ui.armPosition.oninput = function () {
-    NetworkTables.putValue('/SmartDashboard/arm/encoder', parseInt(this.value));
-};
 
 addEventListener('error', (ev) => {
     ipc.send('windowError', { mesg: ev.message, file: ev.filename, lineNumber: ev.lineno })

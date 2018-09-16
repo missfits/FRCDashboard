@@ -17,6 +17,11 @@ body {
     color: white;
     overflow: hidden;
     background: #222;
+    display: flex;
+}
+
+.chooserContainer {
+    margin: 6px 8px;
 }
 
 button, input[type="text"], input[type="number"], .select-container, select {
@@ -29,9 +34,14 @@ button, input[type="text"], input[type="number"], .select-container, select {
     outline: 0;
 }
 
-.select-container {
+#select-container {
     padding: 0;
     display: inline-block;
+    background-color: dimgray;
+}
+
+.var-label{
+    color: dimgray;
 }
 
 select {
@@ -39,6 +49,7 @@ select {
     background: none;
     color: white;
     height: 25px;
+    padding: 0px 0px;
 }
 
 option {
@@ -56,7 +67,6 @@ input[type="checkbox"] {
 /* Major interface panes, aside, article, header, etc. */
 body > * {
     padding: 10px;
-    position: fixed;
     overflow: scroll;
     background: #222;
 }
@@ -73,31 +83,7 @@ body > * {
 }
 
 header {
-    width: 20vw;
-    height: 20vh;
-    top: 0;
-    left: 30vw;
     color: white;
-}
-
-#camera {
-    padding: 0;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 50vw;
-    height: 80vh;
-    overflow: hidden;
-    background-color: #333;
-    /* You'll need to mess with this a bit to get your camera to work. Replace the url with a live-updating image feed from your camera. Using other camera streaming systems will require some tweaking. */
-    /*background-image: url('LINK TO CAMERA SOURCE HERE');*/
-}
-
-article {
-    top: 0;
-    left: 50vw;
-    height: 100vh;
-    width: 35vw;
 }
 
 svg * {
@@ -134,30 +120,11 @@ text {
     text-anchor: middle;
 }
 
-#robot-diagram {
-    position: absolute;
-    bottom: 1px;
-    right: 1vw;
-}
-
-#robot-arm {
-    -webkit-transform-origin: right;
-    -ms-transform-origin: right;
-    transform-origin: right;
-}
-
 #team {
     font-size: 28px;
     letter-spacing: -1px;
 }
 
-aside {
-    right: 0;
-    top: 0;
-    width: 15vw;
-    height: 100vh;
+.var-label{
+    color: dimgray;
 }
-
-    aside > * {
-        margin-bottom: 20px;
-    }

@@ -10,15 +10,16 @@ let ui = {
         arm: document.getElementById('gyro-arm'),
         number: document.getElementById('gyro-number')
     },
-    /*example: {
-        button: document.getElementById('example-button'),
-        readout: document.getElementById('example-readout').firstChild
-    },*/
-    //autoSelect: document.getElementById('auto-select'),
-    selectorBox: document.getElementById("selectors")
+    selectorBox: document.getElementById("select-container"),
+    booleanBox: document.getElementById("booleans"),
+    printoutBox: document.getElementById("printouts")
 };
 var chooserNames = [];
-
+/*
+TODO: have button that shows when robot is disconnected that sends in fake networktables values
+change choosers to "radio" input type?
+take gyro printout out (it's redundant)
+*/
 // Key Listeners
 NetworkTables.addGlobalListener(onValueChanged, true);
 function onValueChanged(key, value, isNew) {
@@ -43,28 +44,36 @@ function onValueChanged(key, value, isNew) {
                 div.appendChild(name);
                 ui.selectorBox.appendChild(div);
 			}else{*/
-				var name = document.createElement("p");
-				name.innerHTML = keyArr[2];
-				ui.selectorBox.appendChild(name);
-				var select = document.createElement("select");
-				select.id = keyArr[2];
-				ui.selectorBox.appendChild(select);
-				select.onchange = function () {
-					console.log("changed");
-					NetworkTables.putValue('/SmartDashboard/' + keyArr[2] + '/selected', this.value);
-					console.log(name.innerHTML + ": " + this.value);
-				};
-				for (var a in value) {
-					var choice = document.createElement("option");
-					choice.innerHTML = value[a];
-					select.appendChild(choice);
-				}
-			//}
+            var box = document.createElement("div");
+            box.className = "chooserContainer";
+            ui.selectorBox.appendChild(box);
+		    var name = document.createElement("p");
+			name.innerHTML = keyArr[2];
+			box.appendChild(name);
+			var select = document.createElement("select");
+			select.id = keyArr[2];
+			box.appendChild(select);
+			select.onchange = function () {
+                console.log("changed");
+                NetworkTables.putValue('/SmartDashboard/' + keyArr[2] + '/selected', this.value);
+				console.log(name.innerHTML + ": " + this.value);
+			}
+			for (var a in value) {
+				var choice = document.createElement("option");
+				choice.innerHTML = value[a];
+				select.appendChild(choice);
+			}
         } else if ((typeof value == "number" || typeof value == "string") && keyArr.length == 3) {
             var display = document.createElement("p");
             display.id = keyArr[2];
-            display.innerHTML = keyArr[2] + " : " + value;
-            document.getElementById("printouts").appendChild(display);
+            var keySpan = document.createElement("span");
+            keySpan.innerHTML = keyArr[2] + ": ";
+            keySpan.className = "var-label";
+            display.appendChild(keySpan);
+            var val = document.createElement("span");
+            val.innerHTML = value;
+            display.appendChild(val);
+            ui.printoutBox.appendChild(display);
         } else if (typeof value == "boolean") {
             /*var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
             svg.setAttribute("height", 15);
@@ -75,7 +84,9 @@ function onValueChanged(key, value, isNew) {
             circle.setAttribute("r", 7.5);
             circle.setAttribute("stroke-width",0)*/
             var display = document.createElement("p");
-            display.innerHTML = keyArr[2] + " : ";
+            var keySpan = document.createElement("span");
+            keySpan.innerHTML = keyArr[2] + " : ";
+            keySpan.className = "var-label";
             var val = document.createElement("span");
             val.innerHTML = value;
             if (value) {
@@ -83,10 +94,11 @@ function onValueChanged(key, value, isNew) {
             } else {
                 val.style.color = "#e2280f";
             }
+            display.appendChild(keySpan);
             display.appendChild(val);
-            document.getElementById("booleans").appendChild(display);
+            ui.booleanBox.appendChild(display);
             NetworkTables.addKeyListener(key, (key, value) => {
-                display.innerHTML = keyArr[2] + " : " + value;
+                val.innerHTML = value;
                 if (value) {
                     val.style.color = "#37cc12";
                 } else {
@@ -108,13 +120,6 @@ let updateGyro = (key, value) => {
     ui.gyro.number.innerHTML = ui.gyro.visualVal + 'º';
 };
 NetworkTables.addKeyListener('/SmartDashboard/Gyro Angle:', updateGyro);
-
-// This button is just an example of triggering an event on the robot by clicking a button.
-/*NetworkTables.addKeyListener('/SmartDashboard/example_variable', (key, value) => {
-    // Set class active if value is true and unset it if it is false
-    ui.example.button.classList.toggle('active', value);
-    ui.example.readout.data = 'Value is ' + value;
-});*/
 
 NetworkTables.addKeyListener('/robot/time', (key, value) => {
     // This is an example of how a dashboard could display the remaining time in a match.
@@ -144,10 +149,10 @@ NetworkTables.addKeyListener('/robot/time', (key, value) => {
 });*/
 
 // The rest of the doc is listeners for UI elements being clicked on
-/*ui.example.button.onclick = function () {
+ui.example.button.onclick = function () {
     // Set NetworkTables values to the opposite of whether button has active class.
     NetworkTables.putValue('/SmartDashboard/example_variable', this.className != 'active');
-};*/
+};
 // Reset gyro value to 0 on click
 ui.gyro.container.onclick = function () {
     // Store previous gyro val, will now be subtracted from val for callibration
@@ -161,8 +166,8 @@ ui.gyro.container.onclick = function () {
 };*/
 
 addEventListener('error', (ev) => {
-    ipc.send('windowError', { mesg: ev.message, file: ev.filename, lineNumber: ev.lineno });
-});
+    ipc.send('windowError', { mesg: ev.message, file: ev.filename, lineNumber: ev.lineno })
+})
 /*console.log(chooserNames[0]);
 //for (var a in chooserNames) {
     document.getElementById(chooserNames[0]).onchange = function () {

@@ -8,12 +8,16 @@
 </head>
 
 <body>
-    <div id="timer">2:15</div>
+    <div>
+        <div id="timer">2:15</div>
+        <div id="select-container"></div>
+    </div>
     <header>
         <!-- Tells whether robot is connected to dashboard. -->
         <div id="robot-state">Unknown state</div>
         <button id="connect-button">Connect</button>
     </header>
+    <!-- Autonomous selector -->
     <!-- You'll need to mess around with the CSS of #camera (found in css/style.css) to get it to work.
         More explanation in that CSS rule. -->
     <!-- <div id="camera">
@@ -32,12 +36,8 @@
     </article>
     <!-- The sidebar of the dashboard. Designed for smaller control elements like selection boxes and small buttons. -->
     <aside>
-        <!-- Example button which toggles /SmartDashboard/exampleValue NetworkTables value.
-            The <p> below then says the value. -->
         <div id="printouts"></div>
         <div id="booleans"></div>
-        <!-- Autonomous selector -->
-        <div class="select-container" id="selectors"></div>
     </aside>
     <script src="networktables/networktables.js"></script>
     <script src="connection.js"></script>

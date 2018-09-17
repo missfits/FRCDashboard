@@ -19,6 +19,9 @@ var chooserNames = [];
 TODO: have button that shows when robot is disconnected that sends in fake networktables values
 change choosers to "radio" input type?
 take gyro printout out (it's redundant)
+give margin to all divs -- ok i did this but test it
+clean up & comment code
+combine if statements for printouts
 */
 // Key Listeners
 NetworkTables.addGlobalListener(onValueChanged, true);

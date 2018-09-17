@@ -24,6 +24,10 @@ body {
     margin: 6px 8px;
 }
 
+div{
+	margin: 10px;
+}
+
 button, input[type="text"], input[type="number"], .select-container, select {
     color: white;
     background: #444;

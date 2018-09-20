@@ -15,13 +15,17 @@ let ui = {
     printoutBox: document.getElementById("printouts")
 };
 var chooserNames = [];
+//NetworkTables.putValue("/SmartDashboard/testString","hi");
 /*
 TODO: have button that shows when robot is disconnected that sends in fake networktables values
 change choosers to "radio" input type?
+	https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_form_create
+	https://www.w3schools.com/tags/tryit.asp?filename=tryhtml5_input_type_radio
+	https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_radio_create
 take gyro printout out (it's redundant)
 give margin to all divs -- ok i did this but test it
 clean up & comment code
-combine if statements for printouts
+combine if statements for printouts -- test
 */
 // Key Listeners
 NetworkTables.addGlobalListener(onValueChanged, true);
@@ -66,9 +70,8 @@ function onValueChanged(key, value, isNew) {
 				choice.innerHTML = value[a];
 				select.appendChild(choice);
 			}
-        } else if ((typeof value == "number" || typeof value == "string") && keyArr.length == 3) {
+        } else if (keyArr.length == 3) {
             var display = document.createElement("p");
-            display.id = keyArr[2];
             var keySpan = document.createElement("span");
             keySpan.innerHTML = keyArr[2] + ": ";
             keySpan.className = "var-label";
@@ -76,16 +79,19 @@ function onValueChanged(key, value, isNew) {
             var val = document.createElement("span");
             val.innerHTML = value;
             display.appendChild(val);
-            ui.printoutBox.appendChild(display);
-        } else if (typeof value == "boolean") {
-            /*var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-            svg.setAttribute("height", 15);
-            svg.setAttribute("width", 15);
-            var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            circle.setAttribute("cx", 7.5);
-            circle.setAttribute("cy", 7.5);
-            circle.setAttribute("r", 7.5);
-            circle.setAttribute("stroke-width",0)*/
+			if(typeof value == "number" || typeof value == "string"){
+				ui.printoutBox.appendChild(display);
+			}else if(typeof value == "boolean"){
+				val.style.color = value? "#37cc12": "#e2280f";
+				ui.booleanBox.appendChild(display);
+			}
+			NetworkTables.addKeyListener(key, (key, value) => {
+				val.innerHTML = value;
+				if(typeof value == "boolean"){
+					val.style.color = value? "#37cc12": "#e2280f";
+				}
+			});
+        } /*else if (typeof value == "boolean") {
             var display = document.createElement("p");
             var keySpan = document.createElement("span");
             keySpan.innerHTML = keyArr[2] + " : ";
@@ -108,7 +114,7 @@ function onValueChanged(key, value, isNew) {
                     val.style.color = "#e2280f";
                 }
             });
-        }
+        }*/
     }
 }
 // Gyro rotation

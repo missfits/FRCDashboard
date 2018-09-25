@@ -15,7 +15,7 @@ let ui = {
     printoutBox: document.getElementById("printouts")
 };
 var chooserNames = [];
-//NetworkTables.putValue("/SmartDashboard/testString","hi");
+
 /*
 TODO: have button that shows when robot is disconnected that sends in fake networktables values
 change choosers to "radio" input type?

@@ -18,6 +18,9 @@ function onRobotConnection(connected) {
     console.log(state);
     if (connected) {
         ui.selectorBox.innerHTML = "";
+        ui.connectorBox.removeChild(ui.simulatorButton);
+    } else {
+        ui.connectorBox.appendChild(ui.simulatorButton);
     }
     ui.robotState.textContent = state;
     connectedVar = connected;

@@ -12,7 +12,9 @@ let ui = {
     },
     selectorBox: document.getElementById("select-container"),
     booleanBox: document.getElementById("booleans"),
-    printoutBox: document.getElementById("printouts")
+    printoutBox: document.getElementById("printouts"),
+    connectorBox: document.getElementById("connectorBox"),
+    simulatorButton: document.getElementById("simulator-button")
 };
 var chooserNames = [];
 

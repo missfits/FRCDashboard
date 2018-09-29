@@ -13,7 +13,6 @@ let ui = {
     selectorBox: document.getElementById("select-container"),
     booleanBox: document.getElementById("booleans"),
     printoutBox: document.getElementById("printouts"),
-    connectorBox: document.getElementById("connectorBox"),
     simulatorButton: document.getElementById("simulator-button")
 };
 var chooserNames = [];
@@ -25,9 +24,7 @@ change choosers to "radio" input type?
 	https://www.w3schools.com/tags/tryit.asp?filename=tryhtml5_input_type_radio
 	https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_radio_create
 take gyro printout out (it's redundant)
-give margin to all divs -- ok i did this but test it
 clean up & comment code
-combine if statements for printouts -- test
 */
 // Key Listeners
 NetworkTables.addGlobalListener(onValueChanged, true);
@@ -159,11 +156,6 @@ NetworkTables.addKeyListener('/robot/time', (key, value) => {
     ui.autoSelect.value = value;
 });*/
 
-// The rest of the doc is listeners for UI elements being clicked on
-ui.example.button.onclick = function () {
-    // Set NetworkTables values to the opposite of whether button has active class.
-    NetworkTables.putValue('/SmartDashboard/example_variable', this.className != 'active');
-};
 // Reset gyro value to 0 on click
 ui.gyro.container.onclick = function () {
     // Store previous gyro val, will now be subtracted from val for callibration

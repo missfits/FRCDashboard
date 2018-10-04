@@ -18,57 +18,50 @@ let ui = {
 var chooserNames = [];
 
 /*
-TODO: have button that shows when robot is disconnected that sends in fake networktables values
-change choosers to "radio" input type?
-	https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_form_create
-	https://www.w3schools.com/tags/tryit.asp?filename=tryhtml5_input_type_radio
-	https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_radio_create
+TODO: make exit test mode button
+make radio choosers actually work
+show default option as already chosen
 take gyro printout out (it's redundant)
 clean up & comment code
 */
 // Key Listeners
 NetworkTables.addGlobalListener(onValueChanged, true);
 function onValueChanged(key, value, isNew) {
-    console.log(NetworkTables.getKeys());
     if (isNew && key.startsWith("/SmartDashboard")) {
         var keyArr = key.split("/");
         //for choosers
         if (key.endsWith("options")) {
             chooserNames.push(keyArr[2]);
-            console.log(keyArr[2]);
-            /*var box = document.createElement("div");
-            ui.selectorBox.appendChild(box);*/
-            /*if (value.length == 2) {
-                var div = document.createElement("div");
-				var cb = document.createElement("input");
-				cb.type = "checkbox";
-				cb.id = keyArr[2];
-                div.appendChild(cb);
-				var name = document.createElement("label");
-				name.for = keyArr[2];
-				name.innerHTML = keyArr[2];
-                div.appendChild(name);
-                ui.selectorBox.appendChild(div);
-			}else{*/
+            var def = NetworkTables.getValue("/SmartDashboard/" + keyArr[2] + "/default");
             var box = document.createElement("div");
             box.className = "chooserContainer";
             ui.selectorBox.appendChild(box);
 		    var name = document.createElement("p");
 			name.innerHTML = keyArr[2];
 			box.appendChild(name);
-			var select = document.createElement("select");
-			select.id = keyArr[2];
-			box.appendChild(select);
-			select.onchange = function () {
-                console.log("changed");
-                NetworkTables.putValue('/SmartDashboard/' + keyArr[2] + '/selected', this.value);
-				console.log(name.innerHTML + ": " + this.value);
-			}
-			for (var a in value) {
-				var choice = document.createElement("option");
-				choice.innerHTML = value[a];
-				select.appendChild(choice);
-			}
+            var f = document.createElement("form");
+            box.appendChild(f);
+            for (var a in value) {
+                var button = document.createElement("input");
+                button.setAttribute("type", "radio");
+                button.setAttribute("name", keyArr[2]);
+                button.id = value[a];
+                if (value[a] == def) {
+                    button.checked = true;
+                }
+                f.appendChild(button);
+                button.onclick = function () {
+                    NetworkTables.putValue('/SmartDashboard/' + keyArr[2] + '/selected', this.id);
+                    //console.log(this.id);
+                };
+                var label = document.createElement("label");
+                label.setAttribute("for",value[a]);
+                var t = document.createTextNode(value[a]);
+                label.appendChild(t);
+                f.appendChild(label);
+                var br = document.createElement("br");
+                f.appendChild(br);
+            }
         } else if (keyArr.length == 3) {
             var display = document.createElement("p");
             var keySpan = document.createElement("span");

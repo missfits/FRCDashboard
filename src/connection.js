@@ -18,6 +18,8 @@ function onRobotConnection(connected) {
     console.log(state);
     if (connected) {
         ui.selectorBox.innerHTML = "";
+        ui.booleanBox.innerHTML = "";
+        ui.printoutBox.innerHTML = "";
         ui.simulatorButton.style.display = "none";
     } else {
         ui.simulatorButton.style.display = "inline-block";
@@ -31,7 +33,6 @@ buttonConnect.onclick = () => {
     if (connectedVar) {
         ipc.send("disconnect");
     } else {
-        console.log("hi");
         ipc.send('connect', address);
     }
 };

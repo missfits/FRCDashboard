@@ -39,6 +39,10 @@ button, input[type="text"], input[type="number"], .select-container, select {
     margin: 5px;
 }
 
+.title {
+    font-weight: bold;
+}
+
 #select-container {
     padding: 0;
     display: inline-block;

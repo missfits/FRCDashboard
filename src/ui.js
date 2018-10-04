@@ -38,7 +38,8 @@ function onValueChanged(key, value, isNew) {
             ui.selectorBox.appendChild(box);
 		    var name = document.createElement("p");
 			name.innerHTML = keyArr[2];
-			box.appendChild(name);
+            box.appendChild(name);
+            name.className = "title";
             var f = document.createElement("form");
             box.appendChild(f);
             for (var a in value) {

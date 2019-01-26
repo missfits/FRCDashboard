@@ -1,4 +1,4 @@
-let address = 'roborio-6418-frc.local',
+let address = 'frcvision.local',
   buttonConnect = document.getElementById('connect-button');
 
 let connectedVar = false;
@@ -18,8 +18,6 @@ function onRobotConnection(connected) {
     console.log(state);
     if (connected) {
         ui.selectorBox.innerHTML = "";
-        ui.booleanBox.innerHTML = "";
-        ui.printoutBox.innerHTML = "";
         ui.simulatorButton.style.display = "none";
     } else {
         ui.simulatorButton.style.display = "inline-block";

@@ -16,18 +16,17 @@ let ui = {
     simulatorButton: document.getElementById("simulator-button")
 };
 var chooserNames = [];
+var testing = false;
 
 /*
 TODO: make exit test mode button
-make radio choosers actually work
-show default option as already chosen
 take gyro printout out (it's redundant)
 clean up & comment code
 */
 // Key Listeners
 NetworkTables.addGlobalListener(onValueChanged, true);
 function onValueChanged(key, value, isNew) {
-    if (isNew && key.startsWith("/SmartDashboard")) {
+    if (isNew && (key.startsWith("/SmartDashboard") || key.startsWith("/RaspberryPi"))) {
         var keyArr = key.split("/");
         //for choosers
         if (key.endsWith("options")) {

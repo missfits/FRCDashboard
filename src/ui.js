@@ -13,10 +13,12 @@ let ui = {
     selectorBox: document.getElementById("select-container"),
     booleanBox: document.getElementById("booleans"),
     printoutBox: document.getElementById("printouts"),
-    simulatorButton: document.getElementById("simulator-button")
+    simulatorButton: document.getElementById("simulator-button"),
+    piButton: document.getElementById("pi-button")
 };
 var chooserNames = [];
 var testing = false;
+var piMode = false;
 
 /*
 TODO: make exit test mode button
@@ -121,7 +123,10 @@ let updateGyro = (key, value) => {
     ui.gyro.number.innerHTML = ui.gyro.visualVal + 'º';
 };
 NetworkTables.addKeyListener('/SmartDashboard/Gyro Angle:', updateGyro);
-
+ui.piButton.onClick = function(){
+    piMode = true;
+    connect();
+}
 NetworkTables.addKeyListener('/robot/time', (key, value) => {
     // This is an example of how a dashboard could display the remaining time in a match.
     // We assume here that value is an integer representing the number of seconds left.

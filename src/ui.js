@@ -133,6 +133,12 @@ NetworkTables.addKeyListener('/robot/time', (key, value) => {
     ui.timer.innerHTML = value < 0 ? '0:00' : Math.floor(value / 60) + ':' + (value % 60 < 10 ? '0' : '') + value % 60;
 });
 
+NetworkTables.addKeyListener("RaspberryPi/Vision Mode", (key,value) =>{
+    if(NetworkTables.getValue("RaspberryPi/Contour Number",0) == 2){
+        
+    }
+});
+
 // Load list of prewritten autonomous modes
 /*NetworkTables.addKeyListener('/SmartDashboard/Auto Strategy/options', (key, value) => {
     // Clear previous list

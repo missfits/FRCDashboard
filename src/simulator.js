@@ -18,5 +18,7 @@ function sendValues() {
         NetworkTables.putValue("/SmartDashboard/testString2", "The Great Gatsby is an unrequited gay love story & y'all can fight me on this");
         NetworkTables.putValue("/SmartDashboard/testBool1", true);
         NetworkTables.putValue("/SmartDashboard/testBool2", false);
+        NetworkTables.putValue("/RaspberryPi/Vision Mode", true);
+        NetworkTables.putValue("/RaspberryPi/Contour Number", 3);
     }
 }

@@ -14,12 +14,12 @@ let ui = {
     booleanBox: document.getElementById("booleans"),
     printoutBox: document.getElementById("printouts"),
     simulatorButton: document.getElementById("simulator-button"),
-    piButton: document.getElementById("pi-button")
+    piButton: document.getElementById("pi-button"),
+    divs: document.getElementsByTagName("div")
 };
 var chooserNames = [];
 var testing = false;
 var piMode = false;
-
 /*
 TODO: make exit test mode button
 take gyro printout out (it's redundant)
@@ -133,9 +133,15 @@ NetworkTables.addKeyListener('/robot/time', (key, value) => {
     ui.timer.innerHTML = value < 0 ? '0:00' : Math.floor(value / 60) + ':' + (value % 60 < 10 ? '0' : '') + value % 60;
 });
 
-NetworkTables.addKeyListener("RaspberryPi/Vision Mode", (key,value) =>{
-    if(NetworkTables.getValue("RaspberryPi/Contour Number",0) == 2){
-        
+NetworkTables.addKeyListener("/RaspberryPi/Vision Mode", (key,value) =>{
+    if(value){
+        if(NetworkTables.getValue("/RaspberryPi/Contour Number",0) == 2){
+            changeBaseColor("#37cc12");
+        }else{
+            changeBaseColor("#e2280f");
+        }
+    }else{
+        changeBaseColor("#222");
     }
 });
 
@@ -182,9 +188,16 @@ addEventListener('error', (ev) => {
         console.log(chooserNames[0] + ": " + this.value);
     }
 //}*/
-
+function changeBaseColor(color){
+    document.body.style.backgroundColor = color;
+    for(var d of ui.divs){
+        if(d.id != "values" && d.id != "booleans" & d.id != "printouts" && d.className != "chooserContainer"){
+            d.style.backgroundColor = color;
+        }
+    }
+}
 function inArray(arr, obj) {
-    for (var a in arr) {
+    for (var a of arr) {
         if (obj == arr[a]) {
             return true;
         }

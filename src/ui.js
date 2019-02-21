@@ -54,7 +54,6 @@ function onValueChanged(key, value, isNew) {
                 f.appendChild(button);
                 button.onclick = function () {
                     NetworkTables.putValue('/SmartDashboard/' + keyArr[2] + '/selected', this.id);
-                    //console.log(this.id);
                 };
                 var label = document.createElement("label");
                 label.setAttribute("for",value[a]);
@@ -64,6 +63,7 @@ function onValueChanged(key, value, isNew) {
                 var br = document.createElement("br");
                 f.appendChild(br);
             }
+        //for other printouts
         } else if (keyArr.length == 3) {
             var display = document.createElement("p");
             var keySpan = document.createElement("span");
@@ -85,30 +85,7 @@ function onValueChanged(key, value, isNew) {
 					val.style.color = value? "#37cc12": "#e2280f";
 				}
 			});
-        } /*else if (typeof value == "boolean") {
-            var display = document.createElement("p");
-            var keySpan = document.createElement("span");
-            keySpan.innerHTML = keyArr[2] + " : ";
-            keySpan.className = "var-label";
-            var val = document.createElement("span");
-            val.innerHTML = value;
-            if (value) {
-                val.style.color = "#37cc12";
-            } else {
-                val.style.color = "#e2280f";
-            }
-            display.appendChild(keySpan);
-            display.appendChild(val);
-            ui.booleanBox.appendChild(display);
-            NetworkTables.addKeyListener(key, (key, value) => {
-                val.innerHTML = value;
-                if (value) {
-                    val.style.color = "#37cc12";
-                } else {
-                    val.style.color = "#e2280f";
-                }
-            });
-        }*/
+        }
     }
 }
 // Gyro rotation
@@ -133,38 +110,13 @@ NetworkTables.addKeyListener('/robot/time', (key, value) => {
     ui.timer.innerHTML = value < 0 ? '0:00' : Math.floor(value / 60) + ':' + (value % 60 < 10 ? '0' : '') + value % 60;
 });
 
-NetworkTables.addKeyListener("/RaspberryPi/Vision Mode", (key,value) =>{
-    if(value){
-        if(NetworkTables.getValue("/RaspberryPi/Contour Number",0) == 2){
-            changeBaseColor("#37cc12");
-        }else{
-            changeBaseColor("#e2280f");
-        }
+NetworkTables.addKeyListener("/RaspberryPi/Contour Number", (key,value)=>{
+    if(NetworkTables.getValue("/RaspberryPi/Vision Mode",false)){
+        changeBaseColor(value == 2? "#37cc12" : "#e2280f");
     }else{
         changeBaseColor("#222");
     }
 });
-
-// Load list of prewritten autonomous modes
-/*NetworkTables.addKeyListener('/SmartDashboard/Auto Strategy/options', (key, value) => {
-    // Clear previous list
-    while (ui.autoSelect.firstChild) {
-        ui.autoSelect.removeChild(ui.autoSelect.firstChild);
-    }
-    // Make an option for each autonomous mode and put it in the selector
-    for (let i = 0; i < value.length; i++) {
-        var option = document.createElement('option');
-        option.appendChild(document.createTextNode(value[i]));
-        ui.autoSelect.appendChild(option);
-    }
-    // Set value to the already-selected mode. If there is none, nothing will happen.
-    ui.autoSelect.value = NetworkTables.getValue('/SmartDashboard/currentlySelectedMode');
-});*/
-
-// Load list of prewritten autonomous modes
-/*NetworkTables.addKeyListener('/SmartDashboard/autonomous/selected', (key, value) => {
-    ui.autoSelect.value = value;
-});*/
 
 // Reset gyro value to 0 on click
 ui.gyro.container.onclick = function () {

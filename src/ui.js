@@ -29,9 +29,9 @@ clean up & comment code
 // Key Listeners
 NetworkTables.addGlobalListener(onValueChanged, true);
 function onValueChanged(key, value, isNew) {
-    if (isNew && !keys.contains(key) && (key.startsWith("/SmartDashboard") || key.startsWith("/RaspberryPi"))) {
+    if (isNew && !keys.includes(key) && (key.startsWith("/SmartDashboard") || key.startsWith("/RaspberryPi"))) {
         var keyArr = key.split("/");
-        keys.add(key);
+        keys.push(key);
         //for choosers
         if (key.endsWith("options")) {
             chooserNames.push(keyArr[2]);

@@ -12,15 +12,20 @@ let ui = {
     },
     selectorBox: document.getElementById("select-container"),
     booleanBox: document.getElementById("booleans"),
-    printoutBox: document.getElementById("printouts"),
+    robotPrintoutBox: document.getElementById("robot-printouts"),
+    piPrintoutBox: document.getElementById("pi-printouts"),
     simulatorButton: document.getElementById("simulator-button"),
     piButton: document.getElementById("pi-button"),
-    divs: document.getElementsByTagName("div")
+    divs: document.getElementsByTagName("div"),
+    distBar: document.getElementById("distBar"),
+    distSvg: document.getElementById("distSvg")
 };
 var keys = [];
 var chooserNames = [];
 var testing = false;
 var piMode = false;
+distSvg.setAttribute("height",document.body.scrollHeight);
+distBar.setAttribute("height",document.body.scrollHeight);
 /*
 TODO: make exit test mode button
 take gyro printout out (it's redundant)
@@ -73,18 +78,22 @@ function onValueChanged(key, value, isNew) {
             keySpan.className = "var-label";
             display.appendChild(keySpan);
             var val = document.createElement("span");
-            val.innerHTML = value;
+            val.innerHTML = typeof value == "number"? value.toFixed(5):value;
             display.appendChild(val);
 			if(typeof value == "number" || typeof value == "string"){
-				ui.printoutBox.appendChild(display);
+                if(key.startsWith("/SmartDashboard")){
+                    ui.robotPrintoutBox.appendChild(display);
+                }else{
+                    ui.piPrintoutBox.appendChild(display);
+                }
 			}else if(typeof value == "boolean"){
 				val.style.color = value? "#37cc12": "#e2280f";
 				ui.booleanBox.appendChild(display);
 			}
 			NetworkTables.addKeyListener(key, (key, value) => {
-				val.innerHTML = value;
+				val.innerHTML = typeof value == "number" ? value.toFixed(5) : value;
 				if(typeof value == "boolean"){
-					val.style.color = value? "#37cc12": "#e2280f";
+					val.style.color = value ? "#37cc12" : "#e2280f";
 				}
 			});
         }
@@ -101,7 +110,7 @@ let updateGyro = (key, value) => {
     ui.gyro.arm.style.transform = `rotate(${ui.gyro.visualVal}deg)`;
     ui.gyro.number.innerHTML = ui.gyro.visualVal + 'º';
 };
-NetworkTables.addKeyListener('/SmartDashboard/Gyro Angle:', updateGyro);
+NetworkTables.addKeyListener('/SmartDashboard/Gyro Angle', updateGyro);
 ui.piButton.onClick = function(){
     piMode = true;
     connect();
@@ -145,7 +154,7 @@ addEventListener('error', (ev) => {
 function changeBaseColor(color){
     document.body.style.backgroundColor = color;
     for(var d of ui.divs){
-        if(d.id != "values" && d.id != "booleans" & d.id != "printouts" && d.className != "chooserContainer"){
+        if(d.id != "values" && d.id != "booleans" & d.id != "robot-printouts" && d.id != "pi-printouts" && d.className != "chooserContainer"){
             d.style.backgroundColor = color;
         }
     }

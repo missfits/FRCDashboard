@@ -8,6 +8,9 @@
 </head>
 
 <body>
+    <svg id = "distSvg" width = "50" height = "500">
+        <rect id="distBar" x="0" y = "0" width="30" height="300" style="fill:rgb(255,255,255);stroke-width:0" />
+    </svg>
     <div>
         <div id="timer">2:15</div>
         <div id="select-container"></div>
@@ -34,7 +37,8 @@
     </div>
     <!-- The sidebar of the dashboard. Designed for smaller control elements like selection boxes and small buttons. -->
     <div id="values">
-        <div id="printouts"></div>
+        <div id="robot-printouts"></div>
+        <div id="pi-printouts"></div>
         <div id="booleans"></div>
     </div>
     <script src="networktables/networktables.js"></script>

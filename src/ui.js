@@ -123,10 +123,14 @@ NetworkTables.addKeyListener('/robot/time', (key, value) => {
 
 NetworkTables.addKeyListener("/RaspberryPi/Contour Number", (key,value)=>{
     if(NetworkTables.getValue("/RaspberryPi/Vision Mode",false)){
-        changeBaseColor(value == 2? "#37cc12" : "#e2280f");
+        changeBaseColor(value >= 2? "#37cc12" : "#e2280f");
     }else{
         changeBaseColor("#222");
     }
+});
+
+NetworkTables.addKeyListener('/SmartDashboard/Distance(in)', (key,value) =>{
+    ui.distBar.style.height = (value*3) - 28;
 });
 
 // Reset gyro value to 0 on click

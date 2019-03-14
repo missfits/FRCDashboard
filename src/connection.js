@@ -26,6 +26,7 @@ function onRobotConnection(connected) {
     connectedVar = connected;
     buttonConnect.innerText = (connected ? "Disconnect" : "Connect");
 }
+//ip: 
 function connect(){
     address = piMode? 'frcvision.local' : "roborio-6418-frc.local",
     console.log(address);

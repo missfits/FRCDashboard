@@ -18,7 +18,8 @@ let ui = {
     piButton: document.getElementById("pi-button"),
     divs: document.getElementsByTagName("div"),
     distBar: document.getElementById("distBar"),
-    distSvg: document.getElementById("distSvg")
+    distSvg: document.getElementById("distSvg"),
+    visionButton: document.getElementById("test-vision")
 };
 var keys = [];
 var chooserNames = [];
@@ -111,9 +112,15 @@ let updateGyro = (key, value) => {
     ui.gyro.number.innerHTML = ui.gyro.visualVal + 'º';
 };
 NetworkTables.addKeyListener('/SmartDashboard/Gyro Angle', updateGyro);
-ui.piButton.onClick = function(){
+ui.piButton.onclick = function(){
     piMode = true;
     connect();
+}
+console.log(ui.visionButton);
+ui.visionButton.onclick = function(){
+    var currentMode = NetworkTables.getValue("/RaspberryPi/Vision Mode",false);
+    console.log(currentMode);
+    NetworkTables.putValue("/RaspberryPi/Vision Mode", !currentMode);
 }
 NetworkTables.addKeyListener('/robot/time', (key, value) => {
     // This is an example of how a dashboard could display the remaining time in a match.

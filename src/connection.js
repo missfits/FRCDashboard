@@ -1,4 +1,4 @@
-let address = "roborio-6418-frc.local",
+let address = "10.64.18.2",
   buttonConnect = document.getElementById('connect-button');
 
 let connectedVar = false;
@@ -28,7 +28,7 @@ function onRobotConnection(connected) {
 }
 //ip: 
 function connect(){
-    address = piMode? 'frcvision.local' : "roborio-6418-frc.local",
+    address = piMode? 'frcvision.local' : "10.64.18.2",
     console.log(address);
     if (connectedVar) {
         ipc.send("disconnect");

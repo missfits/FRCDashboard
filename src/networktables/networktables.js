@@ -9,7 +9,7 @@ var NetworkTables =
             connectionListeners.map(e => e(con));
         });
         ipc.on('add', (ev, mesg) => {
-            console.log(mesg);
+            //console.log(mesg);
             keys[mesg.key] = { val: mesg.val, valType: mesg.valType, id: mesg.id, flags: mesg.flags, new: true };
             globalListeners.map(e => e(mesg.key, mesg.val, true));
             if (globalListeners.length > 0)
@@ -23,7 +23,7 @@ var NetworkTables =
             delete keys[mesg.key];
         });
         ipc.on('update', (ev, mesg) => {
-            console.log(mesg);
+            //console.log(mesg);
             let temp = keys[mesg.key];
             temp.flags = mesg.flags;
             temp.val = mesg.val;

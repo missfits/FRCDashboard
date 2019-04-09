@@ -19,7 +19,8 @@ let ui = {
     divs: document.getElementsByTagName("div"),
     distBar: document.getElementById("distBar"),
     distSvg: document.getElementById("distSvg"),
-    visionButton: document.getElementById("test-vision")
+    visionButton: document.getElementById("test-vision"),
+    reverseButton: document.getElementById("test-reverse")
 };
 var keys = [];
 var chooserNames = [];
@@ -122,6 +123,12 @@ ui.visionButton.onclick = function(){
     console.log(currentMode);
     NetworkTables.putValue("/RaspberryPi/Vision Mode", !currentMode);
 }
+ui.reverseButton.onclick = function(){
+    var currentMode = NetworkTables.getValue("/RaspberryPi/Reverse Drive",false);
+    console.log(currentMode);
+    NetworkTables.putValue("/RaspberryPi/Reverse Drive", !currentMode);
+}
+
 NetworkTables.addKeyListener('/robot/time', (key, value) => {
     // This is an example of how a dashboard could display the remaining time in a match.
     // We assume here that value is an integer representing the number of seconds left.
